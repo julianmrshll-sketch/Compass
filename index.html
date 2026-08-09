@@ -133,7 +133,31 @@
   .extra-title{font-size:10px;color:var(--amber);font-weight:600;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:2px;}
   .extra-val{font-size:13px;color:var(--text);}
 
-  /* APP CONNECT */
+  /* ── CARD SCANNER ── */
+  .scanner-drop{border:2px dashed rgba(232,169,106,0.3);border-radius:var(--radius);padding:32px 20px;text-align:center;cursor:pointer;transition:all 0.2s;background:var(--card);margin-bottom:16px;}
+  .scanner-drop:active{border-color:var(--amber);background:var(--amber-bg);}
+  .scanner-drop-icon{font-size:40px;margin-bottom:10px;}
+  .scanner-drop-label{font-size:14px;color:var(--muted);line-height:1.5;}
+  .scanner-preview{width:100%;border-radius:14px;max-height:200px;object-fit:cover;margin-bottom:16px;display:none;}
+  .scanner-loading{text-align:center;padding:24px;display:none;}
+  .scanner-spin{font-size:32px;animation:spin 1s linear infinite;display:inline-block;margin-bottom:8px;}
+  @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+  .scanner-loading-text{font-size:13px;color:var(--muted);}
+  .scan-items{margin-bottom:16px;}
+  .scan-item{background:var(--card);border-radius:14px;margin-bottom:8px;overflow:hidden;border:1px solid var(--border);}
+  .scan-item-top{display:flex;align-items:center;gap:10px;padding:12px 14px 8px;}
+  .scan-item-value{flex:1;font-size:14px;color:var(--text);font-weight:500;word-break:break-all;}
+  .scan-item-actions{display:flex;gap:4px;align-items:center;flex-shrink:0;}
+  .scan-edit-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:15px;padding:4px;}
+  .scan-dismiss-btn{background:none;border:none;color:var(--danger);cursor:pointer;font-size:20px;padding:4px;line-height:1;}
+  .scan-item-edit{width:100%;background:var(--surface);border:none;border-top:1px solid var(--border);outline:none;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;padding:10px 14px;resize:none;display:none;}
+  .scan-item-edit.open{display:block;}
+  .scan-assign-row{display:flex;gap:6px;padding:0 14px 12px;flex-wrap:wrap;}
+  .scan-assign-chip{padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-family:'Inter',sans-serif;font-size:11px;font-weight:600;cursor:pointer;transition:all 0.15s;white-space:nowrap;}
+  .scan-assign-chip.active{background:var(--amber);color:#1c1917;border-color:var(--amber);}
+  .scan-field-tag{font-size:10px;color:var(--amber);font-weight:600;padding:2px 8px;background:var(--amber-bg);border-radius:20px;white-space:nowrap;}
+
+  /* ── APP CONNECT ── */
   .ac-row{display:flex;gap:8px;margin-top:14px;margin-bottom:6px;flex-wrap:wrap;}
   .ac-btn{flex:1;min-width:60px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:12px 6px;border-radius:14px;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;transition:opacity 0.15s,transform 0.1s;letter-spacing:0.2px;}
   .ac-btn:active{opacity:0.75;transform:scale(0.95);}
@@ -149,6 +173,9 @@
   .field-ac-call{background:rgba(126,200,160,0.12);color:var(--success);}
   .field-ac-wa{background:rgba(37,211,102,0.1);color:#25d366;}
   .field-ac-email{background:rgba(232,169,106,0.12);color:var(--amber);}
+  /* ensure address row wraps correctly */
+  .contact-field{flex-wrap:nowrap;}
+  .field-text{flex:1;min-width:0;overflow:hidden;}
 
   /* MODALS */
   .modal-overlay{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,0.65);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);align-items:flex-end;}
@@ -316,11 +343,56 @@
 
 <!-- ══ MODALS ══ -->
 
+<!-- SCAN INPUT — linked directly to label, no JS click needed -->
+<input type="file" id="scanInput" accept="image/*" style="display:none;position:fixed;z-index:-1" onchange="handleScanImage(event)">
+
+<!-- CARD SCANNER MODAL -->
+<div class="modal-overlay" id="modalScanner" style="z-index:110">
+  <div class="modal">
+    <div class="modal-handle"></div>
+
+    <!-- Step 1: capture -->
+    <div id="scanStep1">
+      <div style="text-align:center;padding:28px 20px 20px">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:16px"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><line x1="3" y1="12" x2="21" y2="12"/></svg>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.5">Select one</div>
+        <label for="scanInput" style="display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;cursor:pointer;font-size:14px;color:var(--soft);font-family:'Inter',sans-serif;font-weight:500;margin-bottom:10px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><line x1="3" y1="12" x2="21" y2="12"/></svg>
+          From device
+        </label>
+      </div>
+      <button class="btn-cancel" onclick="document.getElementById('modalScanner').classList.remove('open')">Cancel</button>
+    </div>
+
+    <!-- Step 2: processing -->
+    <div id="scanStep2" style="display:none">
+      <img id="scanPreview" class="scanner-preview" style="display:block">
+      <div class="scanner-loading" style="display:block;text-align:center;padding:24px">
+        <div class="scanner-spin" style="font-size:32px;animation:spin 1s linear infinite;display:inline-block;margin-bottom:8px">⚙️</div>
+        <div class="scanner-loading-text" style="font-size:13px;color:var(--muted)">Reading card with AI…<br>This takes a few seconds</div>
+      </div>
+    </div>
+
+    <!-- Step 3: assign -->
+    <div id="scanStep3" style="display:none">
+      <img id="scanPreview2" class="scanner-preview" style="display:block;margin-bottom:14px">
+      <div style="font-size:13px;color:var(--soft);margin-bottom:14px;line-height:1.5">Tap a field label to assign each item. Tap again to reassign. Edit ✏️ to correct. × to remove.</div>
+      <div class="scan-items" id="scanItems"></div>
+      <button class="btn-primary" onclick="commitScan()">Continue to Add Contact →</button>
+      <button class="btn-cancel" onclick="rescan()">Scan Again</button>
+      <button class="btn-cancel" onclick="document.getElementById('modalScanner').classList.remove('open')">Cancel</button>
+    </div>
+  </div>
+</div>
+
 <!-- ADD -->
 <div class="modal-overlay" id="modalAdd">
   <div class="modal">
     <div class="modal-handle"></div>
-    <div class="modal-title">New Contact</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <div class="modal-title" style="margin-bottom:0">New Contact</div>
+      <button onclick="openScanner()" style="background:var(--amber-bg);border:1px solid rgba(232,169,106,0.3);border-radius:12px;padding:8px 14px;color:var(--amber);font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><line x1="3" y1="12" x2="21" y2="12"/></svg> Scan</button>
+    </div>
     <div class="form-group"><label class="form-label">Name</label><input class="form-input" id="fName" placeholder="Full name" /></div>
     <div class="form-group"><label class="form-label">Business Name</label><input class="form-input" id="fBiz" placeholder="Company or trade name" /></div>
     <div class="form-group"><label class="form-label">Area / Suburb</label><input class="form-input" id="fArea" placeholder="e.g. Bellville, Claremont" /></div>
@@ -978,6 +1050,200 @@ function scheduleReminder(r){
   },ms);
 }
 function initReminders(){if(!D.reminders)return;D.reminders.filter(r=>!r.fired).forEach(scheduleReminder);}
+
+// ── CARD SCANNER ──
+const SCAN_FIELDS = [
+  {key:'name',    label:'Name'},
+  {key:'biz',     label:'Business'},
+  {key:'area',    label:'Area'},
+  {key:'address', label:'Address'},
+  {key:'land',    label:'Landline'},
+  {key:'cell',    label:'Cell'},
+  {key:'email',   label:'Email'},
+];
+
+let scanItems = [];      // [{id, value, assignedField}]
+let scanAssignments = {}; // {fieldKey: itemId}
+
+function openScanner(){
+  scanItems = [];
+  scanAssignments = {};
+  showScanStep(1);
+  // push scanner modal on top without closing Add modal
+  document.getElementById('modalScanner').classList.add('open');
+}
+
+function rescan(){
+  scanItems = [];
+  scanAssignments = {};
+  showScanStep(1);
+}
+
+function showScanStep(n){
+  [1,2,3].forEach(i => document.getElementById('scanStep'+i).style.display = i===n ? '' : 'none');
+}
+
+async function handleScanImage(e){
+  const file = e.target.files[0];
+  if(!file){ return; }
+  e.target.value = '';
+
+  // Reopen scanner at processing step
+  showScanStep(2);
+  document.getElementById('modalScanner').classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  const reader = new FileReader();
+  reader.onload = async (ev) => {
+    const dataUrl = ev.target.result;
+    document.getElementById('scanPreview').src = dataUrl;
+    document.getElementById('scanPreview2').src = dataUrl;
+    const base64 = dataUrl.split(',')[1];
+    const mime   = file.type || 'image/jpeg';
+
+    try {
+      const extracted = await callClaudeVision(base64, mime);
+      scanItems = extracted.map((val, i) => ({ id: i, value: val, assignedField: null }));
+      renderScanItems();
+      showScanStep(3);
+    } catch(err) {
+      showScanStep(1);
+      showToast('Could not read card — try a clearer photo');
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+async function callClaudeVision(base64, mime){
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 1000,
+      messages: [{
+        role: 'user',
+        content: [
+          {
+            type: 'image',
+            source: { type: 'base64', media_type: mime, data: base64 }
+          },
+          {
+            type: 'text',
+            text: `Extract all contact information from this business card or note. Return ONLY a JSON array of strings, each string being one piece of information (name, company, phone numbers, email addresses, physical address, suburb/area). No labels, no explanation, no markdown. Just the raw JSON array. Example: ["John Smith","Acme Corp","021 555 1234","083 123 4567","john@acme.co.za","12 Main Road","Claremont"]. If you cannot read the image clearly, return an empty array [].`
+          }
+        ]
+      }]
+    })
+  });
+  const data = await res.json();
+  const text = data.content?.find(b => b.type === 'text')?.text || '[]';
+  const clean = text.replace(/```json|```/g,'').trim();
+  return JSON.parse(clean);
+}
+
+function renderScanItems(){
+  const el = document.getElementById('scanItems');
+  if(!scanItems.length){
+    el.innerHTML = '<div style="color:var(--muted);font-size:13px;text-align:center;padding:16px">Nothing could be extracted. Try a clearer photo.</div>';
+    return;
+  }
+  el.innerHTML = scanItems.map(item => {
+    const assigned = item.assignedField ? SCAN_FIELDS.find(f=>f.key===item.assignedField) : null;
+    return `<div class="scan-item" id="si-${item.id}">
+      <div class="scan-item-top">
+        <div class="scan-item-value">${esc(item.value)}</div>
+        <div class="scan-item-actions">
+          ${assigned ? `<span class="scan-field-tag">${assigned.label}</span>` : ''}
+          <button class="scan-edit-btn" onclick="toggleScanEdit(${item.id})" title="Edit">✏️</button>
+          <button class="scan-dismiss-btn" onclick="dismissScanItem(${item.id})" title="Remove">×</button>
+        </div>
+      </div>
+      <textarea class="scan-item-edit" id="se-${item.id}" rows="2" onblur="saveScanEdit(${item.id})">${esc(item.value)}</textarea>
+      <div class="scan-assign-row">
+        ${SCAN_FIELDS.map(f => {
+          const isAssignedHere = item.assignedField === f.key;
+          const takenByOther   = scanAssignments[f.key] !== undefined && scanAssignments[f.key] !== item.id;
+          return `<button class="scan-assign-chip${isAssignedHere?' active':''}" onclick="assignScanItem(${item.id},'${f.key}')">${f.label}${takenByOther?' ⇄':''}</button>`;
+        }).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleScanEdit(id){
+  const ta = document.getElementById('se-'+id);
+  ta.classList.toggle('open');
+  if(ta.classList.contains('open')) ta.focus();
+}
+
+function saveScanEdit(id){
+  const ta = document.getElementById('se-'+id);
+  const item = scanItems.find(i=>i.id===id);
+  if(item && ta.value.trim()) item.value = ta.value.trim();
+  ta.classList.remove('open');
+  renderScanItems();
+}
+
+function dismissScanItem(id){
+  const item = scanItems.find(i=>i.id===id);
+  if(item && item.assignedField) delete scanAssignments[item.assignedField];
+  scanItems = scanItems.filter(i=>i.id!==id);
+  renderScanItems();
+}
+
+function assignScanItem(id, fieldKey){
+  const item = scanItems.find(i=>i.id===id);
+  if(!item) return;
+
+  // if this item is already assigned to this field — unassign
+  if(item.assignedField === fieldKey){
+    delete scanAssignments[fieldKey];
+    item.assignedField = null;
+    renderScanItems();
+    return;
+  }
+
+  // if another item holds this field — swap
+  const currentHolder = scanItems.find(i=>i.id !== id && i.assignedField === fieldKey);
+  if(currentHolder){
+    // swap: give current holder this item's old field
+    const oldField = item.assignedField;
+    currentHolder.assignedField = oldField;
+    if(oldField) scanAssignments[oldField] = currentHolder.id;
+    else if(oldField) delete scanAssignments[oldField];
+  }
+
+  // unlink item's old field
+  if(item.assignedField) delete scanAssignments[item.assignedField];
+
+  // assign
+  item.assignedField = fieldKey;
+  scanAssignments[fieldKey] = id;
+  renderScanItems();
+}
+
+function commitScan(){
+  const result = {};
+  scanItems.forEach(item => {
+    if(item.assignedField) result[item.assignedField] = item.value;
+  });
+
+  // close only the scanner overlay
+  document.getElementById('modalScanner').classList.remove('open');
+
+  // populate add form fields from scan
+  const fieldMap = {name:'fName',biz:'fBiz',area:'fArea',address:'fAddress',land:'fLand',cell:'fCell',email:'fEmail'};
+  Object.entries(result).forEach(([key,val])=>{
+    const inputId = fieldMap[key];
+    if(inputId) document.getElementById(inputId).value = val;
+  });
+
+  // make sure add modal is open
+  document.getElementById('modalAdd').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  showToast('Card scanned — review and save ✓');
+}
 
 // ── BOOT ──
 init();

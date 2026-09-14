@@ -133,7 +133,53 @@
   .extra-title{font-size:10px;color:var(--amber);font-weight:600;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:2px;}
   .extra-val{font-size:13px;color:var(--text);}
 
-  /* ── CARD SCANNER ── */
+  /* ── TASKS ── */
+  .tasks-inner-tabs{display:flex;border-bottom:1px solid var(--border);margin:0 0 0 0;}
+  .task-inner-tab{flex:1;padding:13px 0;text-align:center;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;transition:all 0.2s;background:none;border-top:none;border-left:none;border-right:none;}
+  .task-inner-tab.active{color:var(--amber);border-bottom-color:var(--amber);}
+  .task-pane{display:none;padding:14px 14px 0;}.task-pane.active{display:block;}
+  .task-add-row{display:flex;gap:10px;margin-bottom:20px;}
+  .task-input{flex:1;background:var(--card);border:none;border-radius:14px;padding:13px 16px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;outline:none;box-shadow:0 2px 12px rgba(0,0,0,0.2);}
+  .task-input::placeholder{color:var(--muted);}
+  .task-input:focus{box-shadow:0 0 0 2px rgba(232,169,106,0.3);}
+  .task-add-btn{width:48px;height:48px;border-radius:14px;border:none;background:var(--amber);color:#1c1917;font-size:22px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(232,169,106,0.3);flex-shrink:0;}
+  .task-date-heading{text-align:center;font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin:18px 0 10px;position:relative;}
+  .task-date-heading::before{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:var(--border);}
+  .task-date-heading span{background:var(--bg);padding:0 10px;position:relative;}
+  .task-card{background:var(--card);border-radius:16px;margin-bottom:8px;overflow:hidden;box-shadow:0 3px 14px rgba(0,0,0,0.2);}
+  .task-card-main{display:flex;align-items:flex-start;gap:12px;padding:14px 14px 10px;}
+  .task-checkbox{width:24px;height:24px;border-radius:50%;border:2px solid var(--border);background:none;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.2s;margin-top:1px;}
+  .task-checkbox.done{background:var(--success);border-color:var(--success);}
+  .task-checkbox.done::after{content:'✓';color:#1c1917;font-size:12px;font-weight:700;}
+  .task-text-wrap{flex:1;min-width:0;}
+  .task-text{font-size:14px;color:var(--text);line-height:1.4;}
+  .task-text.done{text-decoration:line-through;color:var(--muted);}
+  .task-meta{font-size:11px;color:var(--muted);margin-top:3px;}
+  .task-actions{display:flex;gap:6px;align-items:center;flex-shrink:0;}
+  .task-ac-btn{width:32px;height:32px;border-radius:10px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:opacity 0.15s;}
+  .task-ac-btn:active{opacity:0.7;}
+  .task-remind-btn{background:rgba(100,160,240,0.1);color:#7ab4f5;}
+  .task-contact-btn{background:var(--amber-bg);color:var(--amber);}
+  .task-del-btn{background:rgba(224,120,120,0.1);color:var(--danger);}
+  .task-reminder-set{font-size:11px;color:#7ab4f5;padding:0 14px 10px;display:flex;align-items:center;gap:5px;}
+  .task-linked-contact{font-size:11px;color:var(--amber);padding:0 14px 10px;display:flex;align-items:center;gap:5px;}
+  .task-linked-ac{display:flex;gap:6px;padding:0 14px 12px;flex-wrap:wrap;}
+  .task-linked-ac-btn{padding:6px 12px;border-radius:20px;border:none;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;cursor:pointer;}
+  .tlab-call{background:rgba(126,200,160,0.12);color:var(--success);}
+  .tlab-wa{background:rgba(37,211,102,0.1);color:#25d366;}
+  .tlab-email{background:rgba(232,169,106,0.12);color:var(--amber);}
+  .empty-tasks{text-align:center;padding:40px 20px;color:var(--muted);font-size:14px;}
+  .empty-tasks div{font-size:32px;margin-bottom:10px;}
+
+  /* CONTACT PICKER */
+  .picker-search{width:100%;background:var(--card);border:1px solid var(--border);border-radius:13px;padding:12px 14px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;outline:none;margin-bottom:14px;}
+  .picker-search:focus{box-shadow:0 0 0 2px rgba(232,169,106,0.3);}
+  .picker-list{max-height:50vh;overflow-y:auto;}
+  .picker-item{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--card);border-radius:14px;margin-bottom:8px;cursor:pointer;transition:opacity 0.15s;}
+  .picker-item:active{opacity:0.7;}
+  .picker-avatar{width:38px;height:38px;border-radius:50%;background:var(--amber-bg);border:1px solid rgba(232,169,106,0.2);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--amber);flex-shrink:0;}
+  .picker-name{font-size:14px;font-weight:600;}
+  .picker-biz{font-size:12px;color:var(--muted);}
   .scanner-drop{border:2px dashed rgba(232,169,106,0.3);border-radius:var(--radius);padding:32px 20px;text-align:center;cursor:pointer;transition:all 0.2s;background:var(--card);margin-bottom:16px;}
   .scanner-drop:active{border-color:var(--amber);background:var(--amber-bg);}
   .scanner-drop-icon{font-size:40px;margin-bottom:10px;}
@@ -430,8 +476,13 @@
     </div>
     <div class="form-group"><label class="form-label">Colleague</label><input class="form-input" id="fColleague" placeholder="Who are you working with on this?" /></div>
     <div class="form-group">
+      <label class="form-label">Date of Entry</label>
+      <input class="form-input" id="fDate" type="date" />
+      <div style="font-size:11px;color:var(--muted);margin-top:5px">Leave blank to use today's date. Change to backdate an entry.</div>
+    </div>
+    <div class="form-group">
       <label class="form-label">Status</label>
-      <select class="status-select" id="fStatus">
+      <select class="status-select" id="fStatus" onchange="updateAutoReminderNote('f')">
         <option value="">— Select status —</option>
         <option value="contacted">Contacted</option>
         <option value="followup">Follow Up</option>
@@ -440,6 +491,7 @@
         <option value="closed">Closed</option>
       </select>
     </div>
+
     <button class="btn-primary" onclick="saveContact()">Save Contact</button>
     <button class="btn-cancel" onclick="closeModal('modalAdd')">Cancel</button>
   </div>
@@ -487,8 +539,12 @@
     </div>
     <div class="form-group"><label class="form-label">Colleague</label><input class="form-input" id="eColleague" placeholder="Who are you working with on this?" /></div>
     <div class="form-group">
+      <label class="form-label">Date of Entry</label>
+      <input class="form-input" id="eDate" type="date" />
+    </div>
+    <div class="form-group">
       <label class="form-label">Status</label>
-      <select class="status-select" id="eStatus">
+      <select class="status-select" id="eStatus" onchange="updateAutoReminderNote('e')">
         <option value="">— Select status —</option>
         <option value="contacted">Contacted</option>
         <option value="followup">Follow Up</option>
@@ -497,6 +553,7 @@
         <option value="closed">Closed</option>
       </select>
     </div>
+
     <button class="btn-primary" onclick="updateContact()">Save Changes</button>
     <button class="btn-cancel" onclick="closeModal('modalEdit')">Cancel</button>
   </div>
@@ -528,6 +585,60 @@
   </div>
 </div>
 
+<!-- ══ TASKS PAGE ══ -->
+<div class="page" id="page-tasks">
+  <div class="dir-header">
+    <div class="header-row">
+      <div>
+        <div class="dir-title">Tasks</div>
+        <div class="dir-sub" id="taskSubCount">0 to do</div>
+      </div>
+    </div>
+  </div>
+  <div class="tasks-inner-tabs">
+    <button class="task-inner-tab active" id="ttab-todo" onclick="switchTaskTab('todo')">To Do</button>
+    <button class="task-inner-tab" id="ttab-completed" onclick="switchTaskTab('completed')">Completed</button>
+  </div>
+
+  <!-- TO DO -->
+  <div class="task-pane active" id="tp-todo">
+    <div class="task-add-row">
+      <input class="task-input" id="taskInput" placeholder="Add a task…" onkeydown="if(event.key==='Enter')quickAddTask()" />
+      <button class="task-add-btn" onclick="quickAddTask()">+</button>
+    </div>
+    <div id="todoList"></div>
+  </div>
+
+  <!-- COMPLETED -->
+  <div class="task-pane" id="tp-completed">
+    <div id="completedList"></div>
+  </div>
+</div>
+
+<!-- TASK REMINDER MODAL -->
+<div class="modal-overlay" id="modalTaskReminder">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">🔔 Task Reminder</div>
+    <div style="font-size:13px;color:var(--soft);margin-bottom:16px" id="taskReminderLabel"></div>
+    <div class="form-group"><label class="form-label">Date</label><input class="form-input" id="trDate" type="date" /></div>
+    <div class="form-group"><label class="form-label">Time</label><input class="form-input" id="trTime" type="time" /></div>
+    <button class="btn-primary" onclick="saveTaskReminder()">Set Reminder</button>
+    <button class="btn-cancel" onclick="closeModal('modalTaskReminder')">Cancel</button>
+  </div>
+</div>
+
+<!-- CONTACT PICKER MODAL -->
+<div class="modal-overlay" id="modalContactPicker">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Link a Contact</div>
+    <input class="picker-search" id="pickerSearch" placeholder="Search contacts…" oninput="renderPicker()" />
+    <div class="picker-list" id="pickerList"></div>
+    <button class="btn-cancel" onclick="closeModal('modalContactPicker')">Cancel</button>
+  </div>
+</div>
+
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
@@ -541,12 +652,17 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
     Directory
   </button>
+  <button class="nav-btn" id="nav-tasks" onclick="showPage('tasks')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+    Tasks
+  </button>
 </nav>
 
 <script>
 // ── DATA ──
 let D = JSON.parse(localStorage.getItem('compass_crm') || '{"contacts":[]}');
 if (!D.contacts) D.contacts = [];
+if (!D.tasks) D.tasks = [];
 function save() { localStorage.setItem('compass_crm', JSON.stringify(D)); }
 
 // ── STATE ──
@@ -602,6 +718,7 @@ function showPage(name){
   document.getElementById('page-'+name).classList.add('active');
   document.getElementById('nav-'+name).classList.add('active');
   if(name==='directory') renderDirectory();
+  if(name==='tasks') renderTasks();
 }
 
 // ── EXTRA FIELDS ──
@@ -639,6 +756,7 @@ document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click
 
 function openAdd(){
   ['fName','fBiz','fArea','fAddress','fLand','fCell','fEmail','fNotes','fColleague'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('fDate').value = todayKey();
   document.getElementById('fStatus').value='';
   ['fExtraLand','fExtraCell','fExtraEmail'].forEach(id=>document.getElementById(id).innerHTML='');
   selPriority='med';
@@ -651,8 +769,9 @@ function openAdd(){
 function saveContact(){
   const name=document.getElementById('fName').value.trim();
   if(!name){showToast('Name is required');return;}
+  const entryDate = document.getElementById('fDate').value || todayKey();
   const contact={
-    id:Date.now(), date:todayKey(), name,
+    id:Date.now(), date:entryDate, name,
     biz:document.getElementById('fBiz').value.trim(),
     area:document.getElementById('fArea').value.trim(),
     address:document.getElementById('fAddress').value.trim(),
@@ -665,10 +784,11 @@ function saveContact(){
     notes:document.getElementById('fNotes').value.trim(),
     colleague:document.getElementById('fColleague').value.trim(),
     priority:selPriority,
-    statuses:document.getElementById('fStatus').value?[document.getElementById('fStatus').value]:[]
+    statuses:document.getElementById('fStatus').value?[document.getElementById('fStatus').value]:[],
   };
   D.contacts.unshift(contact);
-  save();closeModal('modalAdd');renderView();renderDirectory();showToast('Contact saved ✓');
+  save();
+  closeModal('modalAdd');renderView();renderDirectory();showToast('Contact saved ✓');
 }
 
 // ── EDIT CONTACT ──
@@ -685,6 +805,7 @@ function openEdit(id,e){
   document.getElementById('eEmail').value=c.email||'';
   document.getElementById('eNotes').value=c.notes||'';
   document.getElementById('eColleague').value=c.colleague||'';
+  document.getElementById('eDate').value=c.date||todayKey();
   loadExtraFields('eExtraLand',c.extraLand,'tel');
   loadExtraFields('eExtraCell',c.extraCell,'tel');
   loadExtraFields('eExtraEmail',c.extraEmail,'email');
@@ -704,6 +825,7 @@ function updateContact(){
   c.name=name;c.biz=document.getElementById('eBiz').value.trim();
   c.area=document.getElementById('eArea').value.trim();
   c.address=document.getElementById('eAddress').value.trim();
+  c.date=document.getElementById('eDate').value||c.date;
   c.land=document.getElementById('eLand').value.trim();
   c.extraLand=getExtraFields('eExtraLand');
   c.cell=document.getElementById('eCell').value.trim();
@@ -714,6 +836,7 @@ function updateContact(){
   c.colleague=document.getElementById('eColleague').value.trim();
   c.priority=selEditPriority;
   c.statuses=document.getElementById('eStatus').value?[document.getElementById('eStatus').value]:[];
+
   save();closeModal('modalEdit');renderView();renderDirectory();showToast('Contact updated ✓');
 }
 
@@ -1245,9 +1368,240 @@ function commitScan(){
   showToast('Card scanned — review and save ✓');
 }
 
+// ── TASKS ──
+let currentTaskTab = 'todo';
+let taskReminderTaskId = null;
+let contactPickerTaskId = null;
+
+function switchTaskTab(tab){
+  currentTaskTab = tab;
+  document.querySelectorAll('.task-inner-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('ttab-'+tab).classList.add('active');
+  document.querySelectorAll('.task-pane').forEach(p=>p.classList.remove('active'));
+  document.getElementById('tp-'+tab).classList.add('active');
+  renderTasks();
+}
+
+function addWorkingDaysTask(fromDate, days){
+  const d = new Date(fromDate);
+  let added = 0;
+  while(added < days){
+    d.setDate(d.getDate()+1);
+    const day = d.getDay();
+    if(day !== 0 && day !== 6) added++;
+  }
+  return d;
+}
+
+function quickAddTask(){
+  const val = document.getElementById('taskInput').value.trim();
+  if(!val){ showToast('Enter a task first'); return; }
+  const now = new Date();
+  const task = {
+    id: Date.now(),
+    text: val,
+    done: false,
+    dateAdded: now.toISOString(),
+    dateKey: dateKey(now),
+    dateCompleted: null,
+    reminder: null,
+    linkedContactId: null,
+  };
+  // auto reminder: 3 working days at 8am
+  const autoDate = addWorkingDaysTask(now, 3);
+  autoDate.setHours(8,0,0,0);
+  task.reminder = autoDate.toISOString();
+  task.autoReminder = true;
+  D.tasks.unshift(task);
+  save();
+  scheduleTaskReminder(task);
+  document.getElementById('taskInput').value = '';
+  renderTasks();
+  showToast('Task added');
+}
+
+function completeTask(id){
+  const t = D.tasks.find(t=>t.id===id); if(!t) return;
+  t.done = true;
+  t.dateCompleted = new Date().toISOString();
+  save(); renderTasks();
+}
+
+function uncompleteTask(id){
+  const t = D.tasks.find(t=>t.id===id); if(!t) return;
+  t.done = false;
+  t.dateAdded = new Date().toISOString();
+  t.dateKey = dateKey(new Date());
+  t.dateCompleted = null;
+  // reset auto reminder
+  const autoDate = addWorkingDaysTask(new Date(), 3);
+  autoDate.setHours(8,0,0,0);
+  t.reminder = autoDate.toISOString();
+  t.autoReminder = true;
+  save(); scheduleTaskReminder(t); renderTasks();
+  showToast('Moved back to To Do');
+}
+
+function deleteTask(id){
+  if(!confirm('Delete this task?')) return;
+  D.tasks = D.tasks.filter(t=>t.id!==id);
+  save(); renderTasks();
+}
+
+function renderTasks(){
+  const todo      = D.tasks.filter(t=>!t.done);
+  const completed = D.tasks.filter(t=>t.done);
+  const count     = todo.length;
+  document.getElementById('taskSubCount').textContent = `${count} to do · ${completed.length} completed`;
+
+  // TO DO
+  const todoEl = document.getElementById('todoList');
+  if(!todo.length){
+    todoEl.innerHTML = '<div class="empty-tasks"><div>✅</div>Nothing to do — add a task above</div>';
+  } else {
+    // group by dateKey
+    const groups = {};
+    todo.forEach(t=>{ if(!groups[t.dateKey]) groups[t.dateKey]=[]; groups[t.dateKey].push(t); });
+    let html = '';
+    Object.keys(groups).sort((a,b)=>b.localeCompare(a)).forEach(key=>{
+      const label = key===todayKey()?'Today':new Date(key+'T12:00:00').toLocaleDateString('en-ZA',{weekday:'long',day:'numeric',month:'long'});
+      html += `<div class="task-date-heading"><span>${label}</span></div>`;
+      groups[key].forEach(t=>{ html += taskCardHTML(t); });
+    });
+    todoEl.innerHTML = html;
+  }
+
+  // COMPLETED
+  const compEl = document.getElementById('completedList');
+  if(!completed.length){
+    compEl.innerHTML = '<div class="empty-tasks"><div>📋</div>No completed tasks yet</div>';
+  } else {
+    const cGroups = {};
+    completed.forEach(t=>{
+      const k = dateKey(new Date(t.dateCompleted));
+      if(!cGroups[k]) cGroups[k]=[];
+      cGroups[k].push(t);
+    });
+    let html = '';
+    Object.keys(cGroups).sort((a,b)=>b.localeCompare(a)).forEach(key=>{
+      const label = key===todayKey()?'Completed Today':new Date(key+'T12:00:00').toLocaleDateString('en-ZA',{weekday:'long',day:'numeric',month:'long'});
+      html += `<div class="task-date-heading"><span>${label}</span></div>`;
+      cGroups[key].forEach(t=>{ html += taskCardHTML(t); });
+    });
+    compEl.innerHTML = html;
+  }
+}
+
+function taskCardHTML(t){
+  const linkedContact = t.linkedContactId ? D.contacts.find(c=>c.id===t.linkedContactId) : null;
+  const reminderFmt = t.reminder ? new Date(t.reminder).toLocaleDateString('en-ZA',{weekday:'short',day:'numeric',month:'short'}) + ' at ' + new Date(t.reminder).toLocaleTimeString('en-ZA',{hour:'2-digit',minute:'2-digit'}) : '';
+  const addedFmt = new Date(t.dateAdded).toLocaleTimeString('en-ZA',{hour:'2-digit',minute:'2-digit'});
+  const completedFmt = t.dateCompleted ? new Date(t.dateCompleted).toLocaleDateString('en-ZA',{weekday:'short',day:'numeric',month:'short'}) + ' at ' + new Date(t.dateCompleted).toLocaleTimeString('en-ZA',{hour:'2-digit',minute:'2-digit'}) : '';
+
+  const bestNum = linkedContact ? cleanNum(linkedContact.cell||linkedContact.land) : '';
+
+  return `<div class="task-card">
+    <div class="task-card-main">
+      <button class="task-checkbox${t.done?' done':''}" onclick="${t.done?`uncompleteTask(${t.id})`:`completeTask(${t.id})`}"></button>
+      <div class="task-text-wrap">
+        <div class="task-text${t.done?' done':''}">${esc(t.text)}</div>
+        <div class="task-meta">${t.done ? `Completed ${completedFmt}` : `Added ${addedFmt}`}</div>
+      </div>
+      ${!t.done?`<div class="task-actions">
+        <button class="task-ac-btn task-remind-btn" onclick="openTaskReminder(${t.id})" title="Reminder">🔔</button>
+        <button class="task-ac-btn task-contact-btn" onclick="openContactPicker(${t.id})" title="Link contact">👤</button>
+        <button class="task-ac-btn task-del-btn" onclick="deleteTask(${t.id})" title="Delete">×</button>
+      </div>`:`<div class="task-actions"><button class="task-ac-btn task-del-btn" onclick="deleteTask(${t.id})" title="Delete">×</button></div>`}
+    </div>
+    ${t.reminder && !t.done ? `<div class="task-reminder-set">🔔 ${t.autoReminder?'Auto reminder: ':'Reminder: '}${reminderFmt}</div>` : ''}
+    ${linkedContact ? `<div class="task-linked-contact">👤 ${esc(linkedContact.name)}${linkedContact.biz?' · '+esc(linkedContact.biz):''}
+      <div class="task-linked-ac">
+        ${bestNum?`<button class="task-linked-ac-btn tlab-call" onclick="showCallChooser('${esc(bestNum)}','${esc(linkedContact.cell||linkedContact.land)}',event)">📞 Call</button>`:''}
+        ${linkedContact.cell?`<button class="task-linked-ac-btn tlab-wa" onclick="openWhatsApp('${esc(cleanNum(linkedContact.cell))}',event)">${WA_SVG} WhatsApp</button>`:''}
+        ${linkedContact.email?`<button class="task-linked-ac-btn tlab-email" onclick="openEmail('${esc(linkedContact.email)}',event)">${EMAIL_SVG} Email</button>`:''}
+      </div>
+    </div>` : ''}
+  </div>`;
+}
+
+// ── TASK REMINDERS ──
+function openTaskReminder(id){
+  taskReminderTaskId = id;
+  const t = D.tasks.find(t=>t.id===id); if(!t) return;
+  document.getElementById('taskReminderLabel').textContent = t.text.length > 50 ? t.text.substring(0,50)+'…' : t.text;
+  const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate()+1);
+  document.getElementById('trDate').value = t.reminder ? dateKey(new Date(t.reminder)) : dateKey(tomorrow);
+  document.getElementById('trTime').value = t.reminder ? new Date(t.reminder).toTimeString().substring(0,5) : '08:00';
+  openModal('modalTaskReminder');
+}
+
+function saveTaskReminder(){
+  const date = document.getElementById('trDate').value;
+  const time = document.getElementById('trTime').value;
+  if(!date||!time){ showToast('Set a date and time'); return; }
+  const t = D.tasks.find(t=>t.id===taskReminderTaskId); if(!t) return;
+  t.reminder = `${date}T${time}`;
+  t.autoReminder = false;
+  save(); scheduleTaskReminder(t);
+  closeModal('modalTaskReminder');
+  renderTasks();
+  showToast('Reminder set 🔔');
+}
+
+function scheduleTaskReminder(task){
+  if(!task.reminder) return;
+  const ms = new Date(task.reminder).getTime() - Date.now();
+  if(ms <= 0) return;
+  if('Notification' in window && Notification.permission==='default') Notification.requestPermission();
+  setTimeout(()=>{
+    if(task.done) return; // already done, skip
+    const msg = task.text.length > 60 ? task.text.substring(0,60)+'…' : task.text;
+    if('Notification' in window && Notification.permission==='granted'){
+      new Notification('Compass Task 🔔', { body: msg });
+    } else {
+      showToast('Task reminder: '+msg);
+    }
+  }, ms);
+}
+
+function initTaskReminders(){
+  if(!D.tasks) return;
+  D.tasks.filter(t=>!t.done && t.reminder).forEach(scheduleTaskReminder);
+}
+
+// ── CONTACT PICKER ──
+function openContactPicker(taskId){
+  contactPickerTaskId = taskId;
+  document.getElementById('pickerSearch').value = '';
+  renderPicker();
+  openModal('modalContactPicker');
+}
+
+function renderPicker(){
+  const q = document.getElementById('pickerSearch').value.toLowerCase().trim();
+  const contacts = [...D.contacts]
+    .filter(c => !q || [c.name,c.biz].some(f=>(f||'').toLowerCase().includes(q)))
+    .sort((a,b)=>(a.biz||a.name).localeCompare(b.biz||b.name));
+  const el = document.getElementById('pickerList');
+  if(!contacts.length){ el.innerHTML='<div style="color:var(--muted);font-size:13px;text-align:center;padding:20px">No contacts found</div>'; return; }
+  el.innerHTML = contacts.map(c=>`
+    <div class="picker-item" onclick="linkContactToTask(${c.id})">
+      <div class="picker-avatar">${esc(initials(c.biz||c.name))}</div>
+      <div><div class="picker-name">${esc(c.biz||c.name)}</div><div class="picker-biz">${esc(c.biz?c.name:'')}</div></div>
+    </div>`).join('');
+}
+
+function linkContactToTask(contactId){
+  const t = D.tasks.find(t=>t.id===contactPickerTaskId); if(!t) return;
+  t.linkedContactId = contactId;
+  save(); closeModal('modalContactPicker'); renderTasks();
+  showToast('Contact linked ✓');
+}
+
 // ── BOOT ──
 init();
 initReminders();
+initTaskReminders();
 </script>
 </body>
 </html>

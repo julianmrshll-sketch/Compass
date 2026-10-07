@@ -161,7 +161,10 @@
   .task-remind-btn{background:rgba(100,160,240,0.1);color:#7ab4f5;}
   .task-contact-btn{background:var(--amber-bg);color:var(--amber);}
   .task-del-btn{background:rgba(224,120,120,0.1);color:var(--danger);}
-  .task-reminder-set{font-size:11px;color:#7ab4f5;padding:0 14px 10px;display:flex;align-items:center;gap:5px;}
+  .task-edit-btn{background:var(--amber-bg);color:var(--amber);}
+  .task-bullets{padding:4px 14px 10px 46px;list-style:none;}
+  .task-bullets li{font-size:13px;color:var(--soft);line-height:1.6;padding:1px 0;position:relative;padding-left:14px;}
+  .task-bullets li::before{content:'•';position:absolute;left:0;color:var(--amber);}
   .task-linked-contact{font-size:11px;color:var(--amber);padding:0 14px 10px;display:flex;align-items:center;gap:5px;}
   .task-linked-ac{display:flex;gap:6px;padding:0 14px 12px;flex-wrap:wrap;}
   .task-linked-ac-btn{padding:6px 12px;border-radius:20px;border:none;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;cursor:pointer;}
@@ -612,6 +615,24 @@
   <!-- COMPLETED -->
   <div class="task-pane" id="tp-completed">
     <div id="completedList"></div>
+  </div>
+</div>
+
+<!-- TASK EDIT MODAL -->
+<div class="modal-overlay" id="modalTaskEdit">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Edit Task</div>
+    <div class="form-group">
+      <label class="form-label">Task</label>
+      <input class="form-input" id="teTitle" placeholder="Task title" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Bullet Points <span style="color:var(--muted);font-weight:400">(one per line)</span></label>
+      <textarea class="form-textarea" id="teBullets" placeholder="• First point&#10;• Second point&#10;• Third point" style="min-height:120px"></textarea>
+    </div>
+    <button class="btn-primary" onclick="saveTaskEdit()">Save</button>
+    <button class="btn-cancel" onclick="closeModal('modalTaskEdit')">Cancel</button>
   </div>
 </div>
 
@@ -1497,8 +1518,12 @@ function taskCardHTML(t){
   const reminderFmt = t.reminder ? new Date(t.reminder).toLocaleDateString('en-ZA',{weekday:'short',day:'numeric',month:'short'}) + ' at ' + new Date(t.reminder).toLocaleTimeString('en-ZA',{hour:'2-digit',minute:'2-digit'}) : '';
   const addedFmt = new Date(t.dateAdded).toLocaleTimeString('en-ZA',{hour:'2-digit',minute:'2-digit'});
   const completedFmt = t.dateCompleted ? new Date(t.dateCompleted).toLocaleDateString('en-ZA',{weekday:'short',day:'numeric',month:'short'}) + ' at ' + new Date(t.dateCompleted).toLocaleTimeString('en-ZA',{hour:'2-digit',minute:'2-digit'}) : '';
-
   const bestNum = linkedContact ? cleanNum(linkedContact.cell||linkedContact.land) : '';
+
+  // render bullet points
+  const bulletsHTML = (t.bullets && t.bullets.length)
+    ? `<ul class="task-bullets">${t.bullets.filter(b=>b.trim()).map(b=>`<li>${esc(b.replace(/^[•\-\*]\s*/,''))}</li>`).join('')}</ul>`
+    : '';
 
   return `<div class="task-card">
     <div class="task-card-main">
@@ -1508,11 +1533,13 @@ function taskCardHTML(t){
         <div class="task-meta">${t.done ? `Completed ${completedFmt}` : `Added ${addedFmt}`}</div>
       </div>
       ${!t.done?`<div class="task-actions">
+        <button class="task-ac-btn task-edit-btn" onclick="openTaskEdit(${t.id})" title="Edit">✏️</button>
         <button class="task-ac-btn task-remind-btn" onclick="openTaskReminder(${t.id})" title="Reminder">🔔</button>
         <button class="task-ac-btn task-contact-btn" onclick="openContactPicker(${t.id})" title="Link contact">👤</button>
         <button class="task-ac-btn task-del-btn" onclick="deleteTask(${t.id})" title="Delete">×</button>
       </div>`:`<div class="task-actions"><button class="task-ac-btn task-del-btn" onclick="deleteTask(${t.id})" title="Delete">×</button></div>`}
     </div>
+    ${bulletsHTML}
     ${t.reminder && !t.done ? `<div class="task-reminder-set">🔔 ${t.autoReminder?'Auto reminder: ':'Reminder: '}${reminderFmt}</div>` : ''}
     ${linkedContact ? `<div class="task-linked-contact">👤 ${esc(linkedContact.name)}${linkedContact.biz?' · '+esc(linkedContact.biz):''}
       <div class="task-linked-ac">
@@ -1522,6 +1549,30 @@ function taskCardHTML(t){
       </div>
     </div>` : ''}
   </div>`;
+}
+
+// ── TASK EDIT ──
+let editingTaskId = null;
+
+function openTaskEdit(id){
+  editingTaskId = id;
+  const t = D.tasks.find(t=>t.id===id); if(!t) return;
+  document.getElementById('teTitle').value = t.text;
+  document.getElementById('teBullets').value = (t.bullets||[]).join('\n');
+  openModal('modalTaskEdit');
+}
+
+function saveTaskEdit(){
+  const t = D.tasks.find(t=>t.id===editingTaskId); if(!t) return;
+  const title = document.getElementById('teTitle').value.trim();
+  if(!title){ showToast('Task needs a title'); return; }
+  t.text = title;
+  const bulletsRaw = document.getElementById('teBullets').value;
+  t.bullets = bulletsRaw.split('\n').map(l=>l.replace(/^[•\-\*]\s*/,'')).filter(l=>l.trim());
+  save();
+  closeModal('modalTaskEdit');
+  renderTasks();
+  showToast('Task updated ✓');
 }
 
 // ── TASK REMINDERS ──

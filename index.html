@@ -668,17 +668,17 @@
   <div id="q-step1" style="padding:0 14px">
     <div class="q-section-label">What are you quoting?</div>
     <div style="display:flex;gap:10px;margin-bottom:24px">
-      <button class="q-cat-btn" onclick="selectCategory('comms')">
+      <button class="q-cat-btn" onclick="selectCategory('comms',this)">
         <div class="q-cat-icon">📡</div>
         <div class="q-cat-label">Comms</div>
         <div class="q-cat-sub">Phones & Networks</div>
       </button>
-      <button class="q-cat-btn" onclick="selectCategory('printers')">
+      <button class="q-cat-btn" onclick="selectCategory('printers',this)">
         <div class="q-cat-icon">🖨️</div>
         <div class="q-cat-label">Printers</div>
         <div class="q-cat-sub">Copiers & Print</div>
       </button>
-      <button class="q-cat-btn" onclick="selectCategory('security')">
+      <button class="q-cat-btn" onclick="selectCategory('security',this)">
         <div class="q-cat-icon">📹</div>
         <div class="q-cat-label">Security</div>
         <div class="q-cat-sub">CCTV & Access</div>
@@ -1325,7 +1325,7 @@ function closeChooser(){
   document.getElementById('chooserOverlay').classList.remove('open');
   document.body.style.overflow='';
 }
-document.getElementById('chooserOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('chooserOverlay'))closeChooser();});
+// moved to DOMContentLoaded below
 
 // ── REMINDERS ──
 function openReminder(id,e){
@@ -1599,4 +1599,5 @@ const SECURITY_PRODUCTS = [
   { id:'cam_8mp', name:'8MP IP Camera', sub:'4K Outdoor Dome', price:3200, img:null, emoji:'📷' },
   { id:'cam_ptz', name:'PTZ Camera', sub:'Pan/Tilt/Zoom', price:5800, img:null, emoji:'🎥' },
   { id:'nvr_4ch', name:'4 Channel NVR', sub:'Up to 4 cameras', price:2800, img:null, emoji:'💾' },
-  { id:'nvr_8ch', name:'8 Channel NVR', sub:'Up to 8 cameras', price:3800, img:null, 
+  { id:'nvr_8ch', name:'8 Channel NVR', sub:'Up to 8 cameras', price:3800, img:null, emoji:'💾' },
+  { id:'nvr_16ch', name:'16 Channel NVR', sub:'Up to 16 cameras', price:5500, img:

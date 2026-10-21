@@ -921,14 +921,16 @@ function showPage(name){
 }
 
 // ── EXTRA FIELDS ──
-function addExtraField(containerId, type, titleVal='', valVal=''){
+function addExtraField(containerId, type, titleVal, valVal){
+  titleVal=titleVal||''; valVal=valVal||'';
   const wrap = document.getElementById(containerId);
   const row = document.createElement('div');
   row.className = 'extra-field-row';
-  row.innerHTML = `
-    <input class="form-input extra-field-title" type="text" placeholder="Label (e.g. Reception)" value="${esc(titleVal)}" />
-    <input class="form-input extra-field-val" type="${type}" placeholder="${type==='email'?'email@example.com':'+27 00 000 0000'}" value="${esc(valVal)}" />
-    <button class="btn-remove-extra" onclick="this.parentElement.remove()">×</button>`;
+  var ph=type==='email'?'email@example.com':'+27 00 000 0000';
+  row.innerHTML='<input class="form-input extra-field-title" type="text" placeholder="Label (e.g. Reception)" value="'+esc(titleVal)+'" />'
+    +'<input class="form-input extra-field-val" type="'+type+'" placeholder="'+ph+'" value="'+esc(valVal)+'" />'
+    +'<button class="btn-remove-extra" onclick="this.parentElement.remove()">×</button>';
+
   wrap.appendChild(row);
 }
 
@@ -951,7 +953,7 @@ function selEditPri(p,el){selEditPriority=p;document.querySelectorAll('#modalEdi
 // ── MODALS ──
 function openModal(id){document.getElementById(id).classList.add('open');document.body.style.overflow='hidden';}
 function closeModal(id){document.getElementById(id).classList.remove('open');document.body.style.overflow='';}
-document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)closeModal(o.id);}));
+// modal backdrop listeners added in DOMContentLoaded
 
 function openAdd(){
   ['fName','fBiz','fArea','fAddress','fLand','fCell','fEmail','fNotes','fColleague'].forEach(id=>document.getElementById(id).value='');
@@ -1134,75 +1136,78 @@ function selectMonthDay(key){selectedMonthDay=selectedMonthDay===key?null:key;re
 
 // ── CONTACT CARD ──
 function numFieldRow(icon,label,num,extraItems,type){
-  if(!num&&(!extraItems||!extraItems.length)) return `<div class="contact-field"><span class="field-icon">${icon}</span><div class="field-text"><div class="field-label">${label}</div><div class="field-value empty">Not provided</div></div></div>`;
-  const clean=cleanNum(num);
-  let html='';
-  if(num){
-    html+=`<div class="contact-field"><span class="field-icon">${icon}</span><div class="field-text"><div class="field-label">${label}</div><div class="field-value">${esc(num)}</div></div>`;
-    if(type==='tel'){
-      html+=`<button class="field-ac-btn field-ac-call" onclick="showCallChooser('${esc(clean)}','${esc(num)}',event)" title="Call">📞</button>`;
-      if(icon==='📱') html+=`<button class="field-ac-btn field-ac-wa" onclick="openWhatsApp('${esc(clean)}',event)" title="WhatsApp">${WA_SVG}</button>`;
-    } else {
-      html+=`<button class="field-ac-btn field-ac-email" onclick="openEmail('${esc(num)}',event)" title="Email">${EMAIL_SVG}</button>`;
-    }
-    html+=`</div>`;
+  if(!num&&(!extraItems||!extraItems.length)){
+    return '<div class="contact-field"><span class="field-icon">'+icon+'</span><div class="field-text"><div class="field-label">'+label+'</div><div class="field-value empty">Not provided</div></div></div>';
   }
-  (extraItems||[]).forEach(f=>{
-    const ec=cleanNum(f.value);
-    html+=`<div class="contact-field" style="margin-top:4px"><span class="field-icon" style="color:var(--muted);font-size:12px">↳</span><div class="field-text"><div class="field-label">${esc(f.title)||label}</div><div class="field-value">${esc(f.value)}</div></div>`;
+  var clean=cleanNum(num);
+  var html='';
+  if(num){
+    html+='<div class="contact-field"><span class="field-icon">'+icon+'</span><div class="field-text"><div class="field-label">'+label+'</div><div class="field-value">'+esc(num)+'</div></div>';
     if(type==='tel'){
-      html+=`<button class="field-ac-btn field-ac-call" onclick="showCallChooser('${esc(ec)}','${esc(f.value)}',event)" title="Call">📞</button>`;
-      if(icon==='📱') html+=`<button class="field-ac-btn field-ac-wa" onclick="openWhatsApp('${esc(ec)}',event)" title="WhatsApp">${WA_SVG}</button>`;
+      html+='<button class="field-ac-btn field-ac-call" onclick="showCallChooser(this.dataset.n,this.dataset.d,event)" data-n="'+clean.replace(/"/g,'&quot;')+'" data-d="'+esc(num)+'" title="Call">📞</button>';
+      if(icon==='📱') html+='<button class="field-ac-btn field-ac-wa" onclick="openWhatsApp(this.dataset.n,event)" data-n="'+clean.replace(/"/g,'&quot;')+'" title="WhatsApp">'+WA_SVG+'</button>';
     } else {
-      html+=`<button class="field-ac-btn field-ac-email" onclick="openEmail('${esc(f.value)}',event)" title="Email">${EMAIL_SVG}</button>`;
+      html+='<button class="field-ac-btn field-ac-email" onclick="openEmail(this.dataset.e,event)" data-e="'+esc(num)+'" title="Email">'+EMAIL_SVG+'</button>';
     }
-    html+=`</div>`;
+    html+='</div>';
+  }
+  (extraItems||[]).forEach(function(f){
+    var ec=cleanNum(f.value);
+    html+='<div class="contact-field" style="margin-top:4px"><span class="field-icon" style="color:var(--muted);font-size:12px">↳</span><div class="field-text"><div class="field-label">'+esc(f.title||label)+'</div><div class="field-value">'+esc(f.value)+'</div></div>';
+    if(type==='tel'){
+      html+='<button class="field-ac-btn field-ac-call" onclick="showCallChooser(this.dataset.n,this.dataset.d,event)" data-n="'+ec.replace(/"/g,'&quot;')+'" data-d="'+esc(f.value)+'" title="Call">📞</button>';
+      if(icon==='📱') html+='<button class="field-ac-btn field-ac-wa" onclick="openWhatsApp(this.dataset.n,event)" data-n="'+ec.replace(/"/g,'&quot;')+'" title="WhatsApp">'+WA_SVG+'</button>';
+    } else {
+      html+='<button class="field-ac-btn field-ac-email" onclick="openEmail(this.dataset.e,event)" data-e="'+esc(f.value)+'" title="Email">'+EMAIL_SVG+'</button>';
+    }
+    html+='</div>';
   });
   return html;
 }
 
 function contactCardHTML(c){
-  const priClass={high:'p-high',med:'p-med',low:'p-low'}[c.priority||'med'];
-  const statuses=c.statuses||[];
-  const statusBadge=statuses.length?statuses.map(s=>`<span class="status-badge ${STATUS_CLASS[s]||'s-none'}">${STATUS_LABEL[s]||s}</span>`).join(''):`<span class="status-badge s-none">New</span>`;
-  const landSection=numFieldRow('📞','LANDLINE',c.land,c.extraLand,'tel');
-  const cellSection=numFieldRow('📱','CELL',c.cell,c.extraCell,'tel');
-  const emailSection=numFieldRow('📧','EMAIL',c.email,c.extraEmail,'email');
-  const bestNum=cleanNum(c.cell||c.land);
-  return `<div class="contact-card" id="cc-${c.id}">
-    <div class="contact-card-top" onclick="toggleCard(${c.id})">
-      <div class="contact-avatar">${esc(initials(c.name))}</div>
-      <div class="contact-summary"><div class="contact-name">${esc(c.name)}</div><div class="contact-biz">${esc(c.biz||'No business listed')}</div></div>
-      <div class="contact-badges"><div class="priority-dot ${priClass}"></div>${statusBadge}</div>
-    </div>
-    <div class="contact-body" id="cb-${c.id}">
-      <div class="contact-divider"></div>
-      ${c.biz?`<div class="contact-field"><span class="field-icon">🏢</span><div class="field-text"><div class="field-label">BUSINESS</div><div class="field-value">${esc(c.biz)}</div></div></div>`:''}
-      ${c.area?`<div class="contact-field"><span class="field-icon">📍</span><div class="field-text"><div class="field-label">AREA / SUBURB</div><div class="field-value">${esc(c.area)}</div></div></div>`:''}
-      ${c.address?`<div class="contact-field"><span class="field-icon">🗺️</span><div class="field-text"><div class="field-label">ADDRESS</div><div class="field-value">${esc(c.address)}</div></div></div>`:''}
-      ${landSection}${cellSection}${emailSection}
-      ${c.colleague?`<div class="contact-field"><span class="field-icon">🤝</span><div class="field-text"><div class="field-label">COLLEAGUE</div><div class="field-value">${esc(c.colleague)}</div></div></div>`:''}
-      ${c.notes?`<div class="contact-notes-block"><div class="contact-notes-label">NOTES</div><div class="contact-notes-text">${esc(c.notes)}</div></div>`:''}
-      <div class="ac-divider">App Connect</div>
-      <div class="ac-row">
-        ${bestNum?`<button class="ac-btn ac-call" onclick="showCallChooser('${esc(bestNum)}','${esc(c.cell||c.land)}',event)"><span class="ac-btn-icon">📞</span>Call</button>`:''}
-        ${c.cell?`<button class="ac-btn ac-wa" onclick="openWhatsApp('${esc(cleanNum(c.cell))}',event)"><span class="ac-btn-icon">${WA_SVG}</span>WhatsApp</button>`:''}
-        ${c.email?`<button class="ac-btn ac-email" onclick="openEmail('${esc(c.email)}',event)"><span class="ac-btn-icon">${EMAIL_SVG}</span>Email</button>`:''}
-        <button class="ac-btn ac-remind" onclick="openReminder(${c.id},event)"><span class="ac-btn-icon">🔔</span>Remind</button>
-      </div>
-      <div class="contact-actions" style="margin-top:10px">
-        <button class="contact-action-btn btn-edit" onclick="openEdit(${c.id},event)">✏️ Edit</button>
-        <button class="contact-action-btn btn-del" onclick="deleteContact(${c.id},event)">🗑 Delete</button>
-      </div>
-    </div>
-  </div>`;
+  var priClass={high:'p-high',med:'p-med',low:'p-low'}[c.priority||'med'];
+  var statuses=c.statuses||[];
+  var statusBadge=statuses.length?statuses.map(function(s){return '<span class="status-badge '+(STATUS_CLASS[s]||'s-none')+'">'+(STATUS_LABEL[s]||s)+'</span>';}).join(''):'<span class="status-badge s-none">New</span>';
+  var landSection=numFieldRow('📞','LANDLINE',c.land,c.extraLand,'tel');
+  var cellSection=numFieldRow('📱','CELL',c.cell,c.extraCell,'tel');
+  var emailSection=numFieldRow('📧','EMAIL',c.email,c.extraEmail,'email');
+  var bestNum=cleanNum(c.cell||c.land);
+  var bestDisp=esc(c.cell||c.land||'');
+  var html='';
+  html+='<div class="contact-card" id="cc-'+c.id+'">';
+  html+='<div class="contact-card-top" onclick="toggleCard('+c.id+')">';
+  html+='<div class="contact-avatar">'+esc(initials(c.name))+'</div>';
+  html+='<div class="contact-summary"><div class="contact-name">'+esc(c.name)+'</div><div class="contact-biz">'+esc(c.biz||'No business listed')+'</div></div>';
+  html+='<div class="contact-badges"><div class="priority-dot '+priClass+'"></div>'+statusBadge+'</div>';
+  html+='</div>';
+  html+='<div class="contact-body" id="cb-'+c.id+'">';
+  html+='<div class="contact-divider"></div>';
+  if(c.biz) html+='<div class="contact-field"><span class="field-icon">🏢</span><div class="field-text"><div class="field-label">BUSINESS</div><div class="field-value">'+esc(c.biz)+'</div></div></div>';
+  if(c.area) html+='<div class="contact-field"><span class="field-icon">📍</span><div class="field-text"><div class="field-label">AREA / SUBURB</div><div class="field-value">'+esc(c.area)+'</div></div></div>';
+  if(c.address) html+='<div class="contact-field"><span class="field-icon">🗺️</span><div class="field-text"><div class="field-label">ADDRESS</div><div class="field-value">'+esc(c.address)+'</div></div></div>';
+  html+=landSection+cellSection+emailSection;
+  if(c.colleague) html+='<div class="contact-field"><span class="field-icon">🤝</span><div class="field-text"><div class="field-label">COLLEAGUE</div><div class="field-value">'+esc(c.colleague)+'</div></div></div>';
+  if(c.notes) html+='<div class="contact-notes-block"><div class="contact-notes-label">NOTES</div><div class="contact-notes-text">'+esc(c.notes)+'</div></div>';
+  html+='<div class="ac-divider">App Connect</div>';
+  html+='<div class="ac-row">';
+  if(bestNum) html+='<button class="ac-btn ac-call" data-n="'+bestNum.replace(/"/g,'&quot;')+'" data-d="'+bestDisp+'" onclick="showCallChooser(this.dataset.n,this.dataset.d,event)"><span class="ac-btn-icon">📞</span>Call</button>';
+  if(c.cell) html+='<button class="ac-btn ac-wa" data-n="'+cleanNum(c.cell).replace(/"/g,'&quot;')+'" onclick="openWhatsApp(this.dataset.n,event)"><span class="ac-btn-icon">'+WA_SVG+'</span>WhatsApp</button>';
+  if(c.email) html+='<button class="ac-btn ac-email" data-e="'+esc(c.email)+'" onclick="openEmail(this.dataset.e,event)"><span class="ac-btn-icon">'+EMAIL_SVG+'</span>Email</button>';
+  html+='<button class="ac-btn ac-remind" onclick="openReminder('+c.id+',event)"><span class="ac-btn-icon">🔔</span>Remind</button>';
+  html+='</div>';
+  html+='<div class="contact-actions" style="margin-top:10px">';
+  html+='<button class="contact-action-btn btn-edit" onclick="openEdit('+c.id+',event)">✏️ Edit</button>';
+  html+='<button class="contact-action-btn btn-del" onclick="deleteContact('+c.id+',event)">🗑 Delete</button>';
+  html+='</div></div></div>';
+  return html;
 }
 
 function toggleCard(id){
-  const body=document.getElementById('cb-'+id),card=document.getElementById('cc-'+id);
+  var body=document.getElementById('cb-'+id),card=document.getElementById('cc-'+id);
   if(!body||!card)return;
-  const isOpen=body.classList.contains('open');
-  document.querySelectorAll('.contact-body.open').forEach(b=>{b.classList.remove('open');b.closest('.contact-card')?.classList.remove('expanded');});
+  var isOpen=body.classList.contains('open');
+  document.querySelectorAll('.contact-body.open').forEach(function(b){b.classList.remove('open');b.closest('.contact-card')&&b.closest('.contact-card').classList.remove('expanded');});
   if(!isOpen){body.classList.add('open');card.classList.add('expanded');}
 }
 
@@ -1263,11 +1268,11 @@ function renderDirectory(){
         <div class="dir-body contact-body" id="db-${c.id}">
           <div class="contact-divider"></div>
           ${c.biz&&c.name!==c.biz?`<div class="contact-field"><span class="field-icon">👤</span><div class="field-text"><div class="field-label">CONTACT NAME</div><div class="field-value">${esc(c.name)}</div></div></div>`:''}
-          ${c.area?`<div class="contact-field"><span class="field-icon">📍</span><div class="field-text"><div class="field-label">AREA / SUBURB</div><div class="field-value">${esc(c.area)}</div></div></div>`:''}
-          ${c.address?`<div class="contact-field"><span class="field-icon">🗺️</span><div class="field-text"><div class="field-label">ADDRESS</div><div class="field-value">${esc(c.address)}</div></div></div>`:''}
+          ${c.area?'<div class="contact-field"><span class="field-icon">📍</span><div class="field-text"><div class="field-label">AREA / SUBURB</div><div class="field-value">'+esc(c.area)+'</div></div></div>':''}
+          ${c.address?'<div class="contact-field"><span class="field-icon">🗺️</span><div class="field-text"><div class="field-label">ADDRESS</div><div class="field-value">'+esc(c.address)+'</div></div></div>':''}
           ${landSection}${cellSection}${emailSection}
-          ${c.colleague?`<div class="contact-field"><span class="field-icon">🤝</span><div class="field-text"><div class="field-label">COLLEAGUE</div><div class="field-value">${esc(c.colleague)}</div></div></div>`:''}
-          ${c.notes?`<div class="contact-notes-block"><div class="contact-notes-label">NOTES</div><div class="contact-notes-text">${esc(c.notes)}</div></div>`:''}
+          ${c.colleague?'<div class="contact-field"><span class="field-icon">🤝</span><div class="field-text"><div class="field-label">COLLEAGUE</div><div class="field-value">'+esc(c.colleague)+'</div></div></div>':''}
+          ${c.notes?'<div class="contact-notes-block"><div class="contact-notes-label">NOTES</div><div class="contact-notes-text">'+esc(c.notes)+'</div></div>':''}
           <div class="ac-divider">App Connect</div>
           <div class="ac-row">
             ${bestNum?`<button class="ac-btn ac-call" onclick="showCallChooser('${esc(bestNum)}','${esc(c.cell||c.land)}',event)"><span class="ac-btn-icon">📞</span>Call</button>`:''}
@@ -1594,10 +1599,4 @@ const PRINTER_PRODUCTS = [
 ];
 
 const SECURITY_PRODUCTS = [
-  { id:'cam_2mp', name:'2MP IP Camera', sub:'1080p Indoor/Outdoor', price:1800, img:null, emoji:'📷' },
-  { id:'cam_4mp', name:'4MP IP Camera', sub:'2K Indoor/Outdoor', price:2400, img:null, emoji:'📷' },
-  { id:'cam_8mp', name:'8MP IP Camera', sub:'4K Outdoor Dome', price:3200, img:null, emoji:'📷' },
-  { id:'cam_ptz', name:'PTZ Camera', sub:'Pan/Tilt/Zoom', price:5800, img:null, emoji:'🎥' },
-  { id:'nvr_4ch', name:'4 Channel NVR', sub:'Up to 4 cameras', price:2800, img:null, emoji:'💾' },
-  { id:'nvr_8ch', name:'8 Channel NVR', sub:'Up to 8 cameras', price:3800, img:null, emoji:'💾' },
-  { id:'nvr_16ch', name:'16 Channel NVR', sub:'Up to 16 cameras', price:5500, img:
+  { id:'cam_2mp', name:'2MP IP Camera', sub:'1080p Indoor/Outdoor', price:1800, img:null, emoji:'📷
